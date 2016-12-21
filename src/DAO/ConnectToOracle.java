@@ -9,18 +9,22 @@ public class ConnectToOracle {
     private static Connection snglConnection = null;
 
     /**
-     * Se connecte à la base de données SQLITE du dossier /data.
+     * Se connecte à la base de données ORACLE.
      * @throws Exception 
      */
     private ConnectToOracle() throws Exception {
         try {
-            Class.forName("org.postgresql.Driver");
+        	
+        	Class.forName("oracle.jdbc.driver.OracleDriver");
 
-            snglConnection = DriverManager.getConnection("jdbc:oracle:thin:@char-oracle11.condorcet.be:1521:exa3","exa3","blackj");
-        } catch (ClassNotFoundException e) {
-            throw new Exception("Impossible de trouver le driver pour la base de donnée!");
+            snglConnection = DriverManager.getConnection("jdbc:oracle:thin:@char-oracle11.condorcet.be:1521:xe","exa3","blackj");
+        }
+        catch(NoClassDefFoundError e){
+        	throw new Exception("Impossible de trouver le driver pour la base de donnée!");
+
         } catch (SQLException e) {
-        	throw new Exception("Impossible de se connecter à  la base de donnée.");
+        	//throw new Exception("Impossible de se connecter à  la base de donnée.");
+        	System.out.println(e);
         }
 
         if (snglConnection == null) {
