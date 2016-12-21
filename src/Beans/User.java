@@ -6,12 +6,11 @@ import java.util.List;
 public class User {
 	
 	private int					id;
-	private String 				login;
+	private String 	  			mail;
 	private String    			password;
 	private String    			name;
 	private String 	  			firstName;
 	private LocalDate 			birthDate;
-	private String 	  			mail;
 	private int 	  			capital;
 	private List<Transaction> 	transactions;
 	private List<Game>			games;

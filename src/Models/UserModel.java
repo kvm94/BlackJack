@@ -5,20 +5,17 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import Beans.User;
 
 
 public class UserModel {
-	
-	private static final String CHAMP_LOGIN 			= "login";
+
+	private static final String CHAMP_MAIL 				= "mail";
     private static final String CHAMP_PASSWORD 			= "password";
     private static final String CHAMP_CONFIRM_PASSWORD 	= "confirmPassword";
-	private static final String CHAMP_NAME				= "name";
-	private static final String CHAMP_FIRST_NAME		= "firstNAme";
+	//private static final String CHAMP_NAME				= "name";
+	//private static final String CHAMP_FIRST_NAME		= "firstNAme";
 	private static final String CHAMP_BIRTH_DATE 		= "birthDate";
-	private static final String CHAMP_MAIL 				= "mail";
     
     private String 				result;
     private Map<String, String> errors = new HashMap<String, String>();
@@ -62,23 +59,23 @@ public class UserModel {
         return user;
     }
     
-    public User regist(HttpServletRequest request) {
-    	String 		login			= getValueField(request, CHAMP_LOGIN);
-    	String    	password		= getValueField(request, CHAMP_PASSWORD);
-    	String		confirmPassword	= getValueField(request, CHAMP_CONFIRM_PASSWORD);
-    	String    	name			= getValueField(request, CHAMP_NAME);
-    	String 	  	firstName 		= getValueField(request, CHAMP_FIRST_NAME);
-    	String 		birthDate 		= getValueField(request, CHAMP_BIRTH_DATE);
-    	String 	  	mail 			= getValueField(request, CHAMP_MAIL);
+    public User regist(String mail, String password, String confirmPassword, String name, String firstName, String birthDate) {
+    	//String 		login			= getValueField(request, CHAMP_LOGIN);
+    	//String    	password		= getValueField(request, CHAMP_PASSWORD);
+    	//String		confirmPassword	= getValueField(request, CHAMP_CONFIRM_PASSWORD);
+    	//String    	name			= getValueField(request, CHAMP_NAME);
+    	//String 	  	firstName 		= getValueField(request, CHAMP_FIRST_NAME);
+    	//String 		birthDate 		= getValueField(request, CHAMP_BIRTH_DATE);
+    	//String 	  	mail 			= getValueField(request, CHAMP_MAIL);
     	
     	User user = new User();
     	
     	try {
-    		validLogin(login);
+    		validMail(mail);
     	} catch (Exception e) {
-    		setError(CHAMP_LOGIN, e.getMessage());
+    		setError(CHAMP_MAIL, e.getMessage());
     	}
-    	user.setLogin(login);
+    	user.setMail(mail);
 
     	try {
     		validPassword(password, confirmPassword);
@@ -101,13 +98,6 @@ public class UserModel {
     	} catch (Exception e) {
     		setError(CHAMP_BIRTH_DATE, e.getMessage());
     	}
-
-    	try {
-    		validMail(mail);
-    	} catch (Exception e) {
-    		setError(CHAMP_MAIL, e.getMessage());
-    	}
-    	user.setMail(mail);
     	
     	// On doit ici faire les requêtes dans la DB pour s'inscrire
     	
@@ -118,16 +108,6 @@ public class UserModel {
         }
     	
     	return user;
-    }
-    
-    private void validLogin(String login) throws Exception {
-        if (login != null) {
-            if (login.length() < 3) {
-                throw new Exception("Le pseudo doit contenir au moins 3 caractères.");
-            }
-        } else {
-            throw new Exception("Merci de saisir votre pseudo");
-        }
     }
     
     private void validPassword(String password) throws Exception {
@@ -176,6 +156,7 @@ public class UserModel {
         errors.put(field, message);
     }
 
+    /*
     private static String getValueField(HttpServletRequest request, String fieldName) {
         String value = request.getParameter(fieldName);
         if (value == null || value.trim().length() == 0) {
@@ -184,4 +165,5 @@ public class UserModel {
             return value;
         }
     }
+    */
 }
