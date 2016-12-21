@@ -31,7 +31,7 @@ public class Connection extends HttpServlet {
 			throws ServletException, IOException {
 		UserModel model = new UserModel();
 
-		User user = model.connect(request);
+		User user = model.connect(request.getParameter("mail"), request.getParameter("password"));
 
 		HttpSession session = request.getSession();
 

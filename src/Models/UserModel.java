@@ -31,9 +31,9 @@ public class UserModel {
         return errors;
     }
 
-    public User connect(HttpServletRequest request) {
-        String mail 	= getValueField(request, CHAMP_MAIL);
-        String password = getValueField(request, CHAMP_PASSWORD);
+    public User connect(String mail, String password) {
+        //String mail 	= getValueField(request, CHAMP_MAIL);
+        //String password = getValueField(request, CHAMP_PASSWORD);
 
         User user = new User();
 
