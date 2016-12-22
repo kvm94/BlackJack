@@ -15,7 +15,7 @@
                                 
                 <label for="mail">Adresse email <span class="requis">*</span></label>
                 <input type="email" id="mail" name="mail" value="<c:out value="${user.mail}"/>" size="20" maxlength="60" />
-                <span class="error">${model.errors['email']}</span>
+                <span class="error">${model.errors['mail']}</span>
                 <br />
                 
                 <label for="password">Mot de passe <span class="requis">*</span></label>

@@ -13,7 +13,7 @@ public class UserModel {
 	private static final String CHAMP_MAIL 				= "mail";
     private static final String CHAMP_PASSWORD 			= "password";
     private static final String CHAMP_CONFIRM_PASSWORD 	= "confirmPassword";
-	//private static final String CHAMP_NAME				= "name";
+	//private static final String CHAMP_NAME			= "name";
 	//private static final String CHAMP_FIRST_NAME		= "firstNAme";
 	private static final String CHAMP_BIRTH_DATE 		= "birthDate";
     
@@ -29,8 +29,8 @@ public class UserModel {
     }
 
     public User connect(String mail, String password) {
-        //String mail 	= getValueField(request, CHAMP_MAIL);
-        //String password = getValueField(request, CHAMP_PASSWORD);
+        //String mail 		= getValueField(request, CHAMP_MAIL);
+        //String password 	= getValueField(request, CHAMP_PASSWORD);
 
         User user = new User();
 
@@ -60,13 +60,13 @@ public class UserModel {
     }
     
     public User regist(String mail, String password, String confirmPassword, String name, String firstName, String birthDate) {
-    	//String 		login			= getValueField(request, CHAMP_LOGIN);
+    	//String 	  	mail 			= getValueField(request, CHAMP_MAIL);
     	//String    	password		= getValueField(request, CHAMP_PASSWORD);
     	//String		confirmPassword	= getValueField(request, CHAMP_CONFIRM_PASSWORD);
     	//String    	name			= getValueField(request, CHAMP_NAME);
     	//String 	  	firstName 		= getValueField(request, CHAMP_FIRST_NAME);
     	//String 		birthDate 		= getValueField(request, CHAMP_BIRTH_DATE);
-    	//String 	  	mail 			= getValueField(request, CHAMP_MAIL);
+    	
     	
     	User user = new User();
     	
@@ -94,9 +94,9 @@ public class UserModel {
     		setError(CHAMP_BIRTH_DATE, e.getMessage());
     	}
     	try {
-        	user.setBirthDate(LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        	user.setBirthDate(LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     	} catch (Exception e) {
-    		setError(CHAMP_BIRTH_DATE, e.getMessage());
+    		
     	}
     	
     	// On doit ici faire les requêtes dans la DB pour s'inscrire
@@ -106,8 +106,18 @@ public class UserModel {
         } else {
             result = "Échec de l'inscription.";
         }
-    	
+
     	return user;
+    }
+   
+    private void validMail(String mail) throws Exception {
+    	if (mail != null) {
+        	if (!mail.matches("([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)")) {
+                throw new Exception("Merci de saisir une adresse mail valide.");
+            }
+    	} else {
+    		throw new Exception("Merci de saisir une adresse mail.");
+    	}
     }
     
     private void validPassword(String password) throws Exception {
@@ -134,21 +144,11 @@ public class UserModel {
     
     private void validBirthDate(String birthDate) throws Exception {
     	if (birthDate != null) {
-    		if (!birthDate.matches("(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)")) {
-    			throw new Exception("Merci de saisir une date de naissance valide.");
+    		if (!birthDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+    			throw new Exception("Merci de saisir une date de naissance valide [dd/mm/yyyy.");
     		}
     	} else {
     		throw new Exception("Merci de saisir une date de naissance.");
-    	}
-    }
-    
-    private void validMail(String mail) throws Exception {
-    	if (mail != null) {
-        	if (!mail.matches("([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)")) {
-                throw new Exception("Merci de saisir une adresse mail valide.");
-            }
-    	} else {
-    		throw new Exception("Merci de saisir une adresse mail.");
     	}
     }
     
