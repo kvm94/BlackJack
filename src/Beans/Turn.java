@@ -1,15 +1,18 @@
 package Beans;
 
+import java.util.List;
+
 public class Turn {
 	
-	private int		id;
-	private boolean win;
-	private int 	croupierScore;
-	private int 	userScore;
-	private int		bet;
-	private Deck	deck;
+	private int			id;
+	private boolean 	win;
+	private int 		croupierScore;
+	private int 		userScore;
+	private int			bet;
+	private Deck		deck;
+	private List<Card> 	userHand;
+	private List<Card>	croupierHand;
 	
-
 	public int getId() {
 		return id;
 	}
@@ -51,4 +54,18 @@ public class Turn {
 	public void setDeck(Deck deck) {
 		this.deck = deck;
 	}	
+	
+	public List<Card> getUserHand() {
+		return userHand;
+	}
+	public void setUserHand(List<Card> userHand) {
+		this.userHand = userHand;
+	}
+	
+	public List<Card> getCroupierHand() {
+		return croupierHand;
+	}
+	public void setCroupierHand(List<Card> croupierHand) {
+		this.croupierHand = croupierHand;
+	}
 }
