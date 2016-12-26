@@ -13,8 +13,6 @@ public class UserModel {
 	private static final String CHAMP_MAIL 				= "mail";
     private static final String CHAMP_PASSWORD 			= "password";
     private static final String CHAMP_CONFIRM_PASSWORD 	= "confirmPassword";
-	//private static final String CHAMP_NAME			= "name";
-	//private static final String CHAMP_FIRST_NAME		= "firstNAme";
 	private static final String CHAMP_BIRTH_DATE 		= "birthDate";
     
     private String 				result;
@@ -29,10 +27,8 @@ public class UserModel {
     }
 
     public User connect(String mail, String password) {
-        //String mail 		= getValueField(request, CHAMP_MAIL);
-        //String password 	= getValueField(request, CHAMP_PASSWORD);
-
-        User user = new User();
+        
+    	User user = new User();
 
         try {
             validMail(mail);
@@ -60,13 +56,6 @@ public class UserModel {
     }
     
     public User regist(String mail, String password, String confirmPassword, String name, String firstName, String birthDate) {
-    	//String 	  	mail 			= getValueField(request, CHAMP_MAIL);
-    	//String    	password		= getValueField(request, CHAMP_PASSWORD);
-    	//String		confirmPassword	= getValueField(request, CHAMP_CONFIRM_PASSWORD);
-    	//String    	name			= getValueField(request, CHAMP_NAME);
-    	//String 	  	firstName 		= getValueField(request, CHAMP_FIRST_NAME);
-    	//String 		birthDate 		= getValueField(request, CHAMP_BIRTH_DATE);
-    	
     	
     	User user = new User();
     	
@@ -155,15 +144,4 @@ public class UserModel {
     private void setError(String field, String message) {
         errors.put(field, message);
     }
-
-    /*
-    private static String getValueField(HttpServletRequest request, String fieldName) {
-        String value = request.getParameter(fieldName);
-        if (value == null || value.trim().length() == 0) {
-            return null;
-        } else {
-            return value;
-        }
-    }
-    */
 }
