@@ -1,22 +1,14 @@
 package Beans;
 
 public class Card {
-	public Sign sign;
-    public Rank rank;
-    public int 	value;
+	private String	name;
+    private int 	value;
     
-	public Sign getSign() {
-		return sign;
+	public String getName() {
+		return name;
 	}
-	public void setSign(Sign sign) {
-		this.sign = sign;
-	}
-	
-	public Rank getRank() {
-		return rank;
-	}
-	public void setRank(Rank rank) {
-		this.rank = rank;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public int getValue() {

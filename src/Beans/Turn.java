@@ -7,7 +7,7 @@ public class Turn {
 	private int 	croupierScore;
 	private int 	userScore;
 	private int		bet;
-	private Game	game;
+	private Deck	deck;
 	
 
 	public int getId() {
@@ -45,10 +45,10 @@ public class Turn {
 		this.bet = bet;
 	}
 	
-	public Game getGame() {
-		return game;
+	public Deck getDeck() {
+		return deck;
 	}
-	public void setGame(Game game) {
-		this.game = game;
+	public void setDeck(Deck deck) {
+		this.deck = deck;
 	}	
 }
