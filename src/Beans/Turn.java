@@ -5,7 +5,7 @@ import java.util.List;
 public class Turn {
 	
 	private int			id;
-	private boolean 	win;
+	private int		 	win;
 	private int 		croupierScore;
 	private int 		userScore;
 	private int			bet;
@@ -20,10 +20,10 @@ public class Turn {
 		this.id = id;
 	}
 	
-	public boolean isWin() {
+	public int isWin() {
 		return win;
 	}
-	public void setWin(boolean win) {
+	public void setWin(int win) {
 		this.win = win;
 	}
 	
