@@ -209,6 +209,8 @@ public class TurnModel {
 				}
 			}
 		} while (true);
+		
+		// TODO CREATE TURN
 	}
 
 	private void distributeACard(List<Card> hand, Card card) {

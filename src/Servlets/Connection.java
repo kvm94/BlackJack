@@ -29,6 +29,7 @@ public class Connection extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
+		
 		UserModel model = new UserModel();
 
 		User user = model.connect(request.getParameter("mail"), request.getParameter("password"));

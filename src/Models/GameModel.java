@@ -10,7 +10,6 @@ import Beans.Turn;
 public class GameModel {
 
 	public Game init(int capital) {
-		
 		// TODO : temporaire
 		Scanner sc = new Scanner(System.in);
 		
@@ -30,8 +29,8 @@ public class GameModel {
 			System.out.println("How much would you like to bet? (1 - " + capital + ")");
 			
 			// TODO : temporaire
-			int bet = sc.nextInt();	        
-	        
+			int bet = sc.nextInt();
+	        			
 	        // On ajoute le trun à la liste eton le lance en même temps
 			game.getTurns().add(turn.start(bet));
             

@@ -44,7 +44,7 @@ public class UserModel {
         }
         user.setPassword(password);
 
-        // On doit ici faire les requêtes dans la DB pour se connecter
+        // TODO : On doit ici faire les requêtes dans la DB pour se connecter
         
         if (errors.isEmpty()) {
             result = "Succès de la connexion.";
@@ -88,7 +88,7 @@ public class UserModel {
     		
     	}
     	
-    	// On doit ici faire les requêtes dans la DB pour s'inscrire
+    	// TODO: On doit ici faire les requêtes dans la DB pour s'inscrire
     	
     	if (errors.isEmpty()) {
             result = "Succès de l'inscription.";
