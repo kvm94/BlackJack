@@ -29,18 +29,22 @@ public class UserDAO extends DAO<User>{
 		try{
 
 			if(!find(obj)){
-				/**
-				 * TODO: ADD stored procedure
-				 */
-				/*PreparedStatement statement = connect.prepareStatement(
-						"INSERT INTO Accreditation (categorie,sport) VALUES(?,?)");
-				statement.setInt(1,obj.getCat().getValue());
-				statement.setInt(2,obj.getSport().getValue());
+				
+				String sql = "{call ADDUSER(?,?,?,?,?,?)}"; 
+				CallableStatement call = connect.prepareCall(sql); 
+				
+				call.setString(1,obj.getPassword());
+				call.setString(2,  obj.getName());
+				call.setString(3,  obj.getFirstName());
+				
+				long date = obj.getBirthDate().toEpochDay();
+				call.setLong(4, date);
 
-				statement.executeUpdate();
-
-				check = true;
-				 */
+				call.setString(5,obj.getMail());
+				call.setInt(6,  obj.getCapital());
+				
+				if(call.execute()) 
+				    check = true;
 			}
 
 		}
@@ -123,20 +127,28 @@ public class UserDAO extends DAO<User>{
 	public boolean find(User obj){
 		boolean check = false;
 		try{
-			/**
-			 * TODO: ADD stored procedure
-			 */
-			/*
-			ResultSet result = this.connect.createStatement(
-					ResultSet.TYPE_FORWARD_ONLY,
-					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Accreditation WHERE categorie = " 
-					+ obj.getCat().getValue()
-					+ " and sport = " + obj.getSport().getValue());
+			String sql = "{call FINDUSER(?,?,?)}";
+			CallableStatement call = connect.prepareCall(sql, 
+					ResultSet.TYPE_FORWARD_ONLY, 
+					ResultSet.CONCUR_READ_ONLY);
 
-			while(result.next()){
+			call.setString(1,obj.getMail());
+			call.setString(2, obj.getPassword());
+			call.registerOutParameter(3, OracleTypes.CURSOR); //REF CURSOR
+
+			call.execute();
+			ResultSet result = ((OracleCallableStatement)call).getCursor(3);
+
+
+
+			//traitement des informations 
+			while(result.next()){ 
 				check = true;
-			}	
-			 */
+			} 
+			result.close();
+			result = null;
+			call.close();
+			call = null;
 		}
 		catch(Exception e){
 			e.printStackTrace();
