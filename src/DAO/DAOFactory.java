@@ -9,7 +9,7 @@ public class DAOFactory extends AbstractDAOFactory{
 	public DAOFactory() throws Exception{
 		try{
 			if(conn == null){
-				ConnectToOracle.getInstance();
+				conn = ConnectToOracle.getInstance();
 			}
 		}
 		catch(Exception ex){

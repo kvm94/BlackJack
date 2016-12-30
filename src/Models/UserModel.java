@@ -1,7 +1,12 @@
 package Models;
 
+
+import DAO.AbstractDAOFactory;
+import DAO.UserDAO;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +22,11 @@ public class UserModel {
     
     private String 				result;
     private Map<String, String> errors = new HashMap<String, String>();
-
+    
+    private AbstractDAOFactory adf;
+    private UserDAO userDAO;
+    
+    
     public String getResult() {
         return result;
     }
@@ -26,9 +35,13 @@ public class UserModel {
         return errors;
     }
 
-    public User connect(String mail, String password) {
-        
+    public User connect(String mail, String password) throws Exception {
+    	
+    	adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		userDAO = (UserDAO)adf.getUserDAO();
+		
     	User user = new User();
+    	ArrayList<User> temp = new ArrayList<User>();
 
         try {
             validMail(mail);
@@ -44,10 +57,22 @@ public class UserModel {
         }
         user.setPassword(password);
 
-        // TODO : On doit ici faire les requêtes dans la DB pour se connecter
+        
         
         if (errors.isEmpty()) {
-            result = "Succès de la connexion.";
+        	
+        	//Get info from DB
+            temp = userDAO.find(user.getMail(), user.getPassword());
+            if(temp.size() > 0){
+            	
+            	user = temp.get(0);
+            	
+                result = "Succès de la connexion.";
+
+            }
+            else{
+                result = "Échec de la connexion.";
+            }
         } else {
             result = "Échec de la connexion.";
         }

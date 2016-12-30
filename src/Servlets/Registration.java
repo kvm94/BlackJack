@@ -27,14 +27,21 @@ public class Registration extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
-		UserModel model = new UserModel();
 		
-		User user = model.regist(request.getParameter("mail"), request.getParameter("password"), request.getParameter("confirmPassword"), request.getParameter("name"), request.getParameter("firstName"), request.getParameter("birthDate"));
+		try {
+			UserModel model = new UserModel();
+			User user = model.regist(request.getParameter("mail"), request.getParameter("password"), request.getParameter("confirmPassword"), request.getParameter("name"), request.getParameter("firstName"), request.getParameter("birthDate"));
+			
+			request.setAttribute(ATT_MODEL, model);
+			request.setAttribute(ATT_USER, user);
+			
+			this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 		
-		request.setAttribute(ATT_MODEL, model);
-		request.setAttribute(ATT_USER, user);
-		
-		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+		
 
 }

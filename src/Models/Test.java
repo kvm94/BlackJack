@@ -5,7 +5,7 @@ import Beans.User;
 
 public class Test {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		UserModel userModel = new UserModel();
 		User user = userModel.connect("test", "test");
 		
