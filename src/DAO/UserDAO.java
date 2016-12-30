@@ -30,18 +30,19 @@ public class UserDAO extends DAO<User>{
 
 			if(!find(obj)){
 				
-				String sql = "{call ADDUSER(?,?,?,?,?,?)}"; 
+				String sql = "{call ADDUSER(?,?,?,?,?,?, ?)}"; 
 				CallableStatement call = connect.prepareCall(sql); 
 				
-				call.setString(1,obj.getPassword());
-				call.setString(2,  obj.getName());
-				call.setString(3,  obj.getFirstName());
+				call.setString(1, "anonymous");
+				call.setString(2,obj.getPassword());
+				call.setString(3,  obj.getName());
+				call.setString(4,  obj.getFirstName());
 				
 				long date = obj.getBirthDate().toEpochDay();
-				call.setLong(4, date);
+				call.setLong(5, date);
 
-				call.setString(5,obj.getMail());
-				call.setInt(6,  obj.getCapital());
+				call.setString(6,obj.getMail());
+				call.setInt(7,  obj.getCapital());
 				
 				if(call.execute()) 
 				    check = true;
