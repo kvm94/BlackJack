@@ -36,8 +36,6 @@ public class Connection extends HttpServlet {
 			UserModel model = new UserModel();
 			User user = model.connect(request.getParameter("mail"), request.getParameter("password"));
 
-			user.setCapital(1000);
-
 			HttpSession session = request.getSession();
 			if (model.getErrors().isEmpty()) {
 				session.setAttribute(ATT_SESSION_USER, user);

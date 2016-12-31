@@ -70,6 +70,7 @@ public class UserModel {
 
 		} catch (Exception e1) {
 			result = e1.getMessage();
+			setError( null, result );
 		}
 		
 		return user;
@@ -133,6 +134,7 @@ public class UserModel {
 
 		} catch (Exception e1) {
 			result = e1.getMessage();
+			setError( null, result );
 		}
 		
 		return user;
