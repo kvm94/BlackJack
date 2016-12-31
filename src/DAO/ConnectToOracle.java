@@ -23,8 +23,7 @@ public class ConnectToOracle {
         	throw new Exception("Impossible de trouver le driver pour la base de donnée!");
 
         } catch (SQLException e) {
-        	//throw new Exception("Impossible de se connecter à  la base de donnée.");
-        	System.out.println(e);
+        	throw new Exception("Impossible de se connecter à  la base de donnée.");
         }
 
         if (snglConnection == null) {
