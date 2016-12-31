@@ -1,11 +1,14 @@
 package DAO;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 import Beans.*;
+import oracle.jdbc.OracleCallableStatement;
+import oracle.jdbc.OracleTypes;
 
 public class TransactionDAO extends DAO<Transaction>{
 
@@ -23,25 +26,19 @@ public class TransactionDAO extends DAO<Transaction>{
 		boolean check = false;
 
 		try{
-			
-			if(!find(obj)){
-				/**
-				 * TODO: ADD stored procedure
-				 */
-				/*PreparedStatement statement = connect.prepareStatement(
-						"INSERT INTO Accreditation (categorie,sport) VALUES(?,?)");
-				statement.setInt(1,obj.getCat().getValue());
-				statement.setInt(2,obj.getSport().getValue());
+			String sql = "{call ADDTRANSACTION(?, ?, ?)}";
+			CallableStatement call = connect.prepareCall(sql);
 
-				statement.executeUpdate();
-				
-				check = true;
-				*/
-			}
-			
+			long date = obj.getDate().toEpochDay();
+			call.setLong(1, date);
+			call.setInt(2,  obj.getAmount());
+			call.setInt(3,  obj.getUser().getId());
+
+			if(call.execute()) 
+			    check = true;
 		}
-		catch (Exception e){
-			e.printStackTrace();  
+		catch(Exception e){
+			e.printStackTrace();
 		}
 		return check;
 	}
@@ -53,16 +50,8 @@ public class TransactionDAO extends DAO<Transaction>{
 		try{
 			/**
 			 * TODO: ADD stored procedure
+			 * don't need
 			 */
-			/*
-			PreparedStatement statement = connect.prepareStatement(
-					"DELETE FROM Accreditation WHERE id_accreditation= ?");
-			statement.setInt(1,obj.getId());
-
-			statement.executeUpdate();
-
-			check = true;
-			*/
 		}
 		catch (Exception e){
 			e.printStackTrace();  
@@ -76,16 +65,9 @@ public class TransactionDAO extends DAO<Transaction>{
 		try{
 			/**
 			 * TODO: ADD stored procedure
+			 * don't need
 			 */
-			/*
-			PreparedStatement statement = connect.prepareStatement(
-					"UPDATE Accreditation set categorie =? ,sport = ? WHERE id_accreditation = " + obj.getId());
-			statement.setInt(1,obj.getCat().getValue());
-			statement.setInt(2,obj.getSport().getValue());
-
-			statement.executeUpdate();
-			check = true;
-			*/
+		
 		}
 		catch (Exception e){
 			e.printStackTrace();  
@@ -93,51 +75,37 @@ public class TransactionDAO extends DAO<Transaction>{
 		return check;
 	}
 
-	public Transaction find(int id){
-		Transaction transaction = new Transaction();
+	public ArrayList<Transaction> find(Object user){
+		User u = (User)user;
+		ArrayList<Transaction> transacts =  new ArrayList<Transaction>();
 		try{
-			/**
-			 * TODO: ADD stored procedure
-			 */
-			/*
-			ResultSet result = this.connect.createStatement(
-					ResultSet.TYPE_FORWARD_ONLY,
-					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Accreditation WHERE id_accreditation = " + id);
+			String sql = "{call FINDTRANSACTIONBYUSER(?, ?)}";
+			CallableStatement call = connect.prepareCall(sql, 
+					ResultSet.TYPE_FORWARD_ONLY, 
+					ResultSet.CONCUR_READ_ONLY);
+
+			call.setInt(1, u.getId());
+			call.registerOutParameter(2, OracleTypes.CURSOR); //REF CURSOR
+
+			call.execute();
+			ResultSet result = ((OracleCallableStatement)call).getCursor(2);
 			
 			while(result.next()){
-				accreditation.setId(result.getInt("id_accreditation"));
+				Transaction tmp = new Transaction();
 				
+				tmp.setId(result.getInt("id_transaction"));
+				long date = result.getInt("date_transaction");
+				tmp.setDate(LocalDate.ofEpochDay(date));
+				tmp.setAmount(result.getInt("amount"));
+				tmp.setUser(u);
+				
+				transacts.add(tmp);
 			}	
-			*/
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
-		return transaction;
-	}
-	
-	public boolean find(Transaction obj){
-		boolean check = false;
-		try{
-			/**
-			 * TODO: ADD stored procedure
-			 */
-			/*
-			ResultSet result = this.connect.createStatement(
-					ResultSet.TYPE_FORWARD_ONLY,
-					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Accreditation WHERE categorie = " 
-					+ obj.getCat().getValue()
-					+ " and sport = " + obj.getSport().getValue());
-			
-			while(result.next()){
-				check = true;
-			}	
-			*/
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-		return check;
+		return transacts;
 	}
 	
 	

@@ -53,7 +53,7 @@ public class UserModel {
 			if (errors.isEmpty()) {
 
 				//Get info from DB
-				temp = userDAO.find(user.getMail(), user.getPassword());
+				temp = userDAO.find((Object)user);
 				if(temp.size() > 0){
 
 					user = temp.get(0);

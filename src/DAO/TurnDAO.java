@@ -1,11 +1,13 @@
 package DAO;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
 
 import Beans.*;
+import oracle.jdbc.OracleCallableStatement;
+import oracle.jdbc.OracleTypes;
 
 public class TurnDAO extends DAO<Turn>{
 
@@ -23,25 +25,20 @@ public class TurnDAO extends DAO<Turn>{
 		boolean check = false;
 
 		try{
-			
-			if(!find(obj)){
-				/**
-				 * TODO: ADD stored procedure
-				 */
-				/*PreparedStatement statement = connect.prepareStatement(
-						"INSERT INTO Accreditation (categorie,sport) VALUES(?,?)");
-				statement.setInt(1,obj.getCat().getValue());
-				statement.setInt(2,obj.getSport().getValue());
+			String sql = "{call ADDTURN(?, ?, ?, ?, ?)}";
+			CallableStatement call = connect.prepareCall(sql);
 
-				statement.executeUpdate();
-				
-				check = true;
-				*/
-			}
-			
+			call.setInt(1, obj.isWin());
+			call.setInt(2, obj.getCroupierScore());
+			call.setInt(3, obj.getUserScore());
+			call.setDouble(4, obj.getBet());
+			call.setInt(5,  obj.getIdGame());
+
+			if(call.execute()) 
+			    check = true;
 		}
-		catch (Exception e){
-			e.printStackTrace();  
+		catch(Exception e){
+			e.printStackTrace();
 		}
 		return check;
 	}
@@ -53,16 +50,9 @@ public class TurnDAO extends DAO<Turn>{
 		try{
 			/**
 			 * TODO: ADD stored procedure
+			 * don't need
 			 */
-			/*
-			PreparedStatement statement = connect.prepareStatement(
-					"DELETE FROM Accreditation WHERE id_accreditation= ?");
-			statement.setInt(1,obj.getId());
-
-			statement.executeUpdate();
-
-			check = true;
-			*/
+			
 		}
 		catch (Exception e){
 			e.printStackTrace();  
@@ -76,16 +66,9 @@ public class TurnDAO extends DAO<Turn>{
 		try{
 			/**
 			 * TODO: ADD stored procedure
+			 * don't need
 			 */
-			/*
-			PreparedStatement statement = connect.prepareStatement(
-					"UPDATE Accreditation set categorie =? ,sport = ? WHERE id_accreditation = " + obj.getId());
-			statement.setInt(1,obj.getCat().getValue());
-			statement.setInt(2,obj.getSport().getValue());
-
-			statement.executeUpdate();
-			check = true;
-			*/
+			
 		}
 		catch (Exception e){
 			e.printStackTrace();  
@@ -93,52 +76,41 @@ public class TurnDAO extends DAO<Turn>{
 		return check;
 	}
 
-	public Turn find(int id){
-		Turn turn = new Turn();
+	public ArrayList<Turn> find(Object game){
+		ArrayList<Turn> turns = new ArrayList<Turn>();
+		Game g = (Game)game;
 		try{
-			/**
-			 * TODO: ADD stored procedure
-			 */
-			/*
-			ResultSet result = this.connect.createStatement(
-					ResultSet.TYPE_FORWARD_ONLY,
-					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Accreditation WHERE id_accreditation = " + id);
+			String sql = "{call FINDTURNBYGAME(?, ?)}";
+			CallableStatement call = connect.prepareCall(sql, 
+					ResultSet.TYPE_FORWARD_ONLY, 
+					ResultSet.CONCUR_READ_ONLY);
+
+			call.setInt(1, g.getId());
+			call.registerOutParameter(2, OracleTypes.CURSOR); //REF CURSOR
+
+			call.execute();
+			ResultSet result = ((OracleCallableStatement)call).getCursor(2);
 			
 			while(result.next()){
-				accreditation.setId(result.getInt("id_accreditation"));
+				Turn tmp = new Turn();
 				
+				tmp.setId(result.getInt("id_turn"));
+				tmp.setWin(result.getInt("win"));
+				tmp.setCroupierScore(result.getInt("croupier_score"));
+				tmp.setUserScore(result.getInt("user_score"));
+				tmp.setBet(result.getDouble("bet"));
+				tmp.setIdGame(g.getId());
+				
+				turns.add(tmp);
 			}	
-			*/
+			
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
-		return turn;
+		return turns;
 	}
 	
-	public boolean find(Turn obj){
-		boolean check = false;
-		try{
-			/**
-			 * TODO: ADD stored procedure
-			 */
-			/*
-			ResultSet result = this.connect.createStatement(
-					ResultSet.TYPE_FORWARD_ONLY,
-					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Accreditation WHERE categorie = " 
-					+ obj.getCat().getValue()
-					+ " and sport = " + obj.getSport().getValue());
-			
-			while(result.next()){
-				check = true;
-			}	
-			*/
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-		return check;
-	}
 	
 	
 	//[end]Methods

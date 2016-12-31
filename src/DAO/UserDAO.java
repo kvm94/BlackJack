@@ -61,16 +61,9 @@ public class UserDAO extends DAO<User>{
 		try{
 			/**
 			 * TODO: ADD stored procedure
+			 * don't need
 			 */
-			/*
-			PreparedStatement statement = connect.prepareStatement(
-					"DELETE FROM Accreditation WHERE id_accreditation= ?");
-			statement.setInt(1,obj.getId());
 
-			statement.executeUpdate();
-
-			check = true;
-			 */
 		}
 		catch (Exception e){
 			e.printStackTrace();  
@@ -84,15 +77,7 @@ public class UserDAO extends DAO<User>{
 		try{
 			/**
 			 * TODO: ADD stored procedure
-			 */
-			/*
-			PreparedStatement statement = connect.prepareStatement(
-					"UPDATE Accreditation set categorie =? ,sport = ? WHERE id_accreditation = " + obj.getId());
-			statement.setInt(1,obj.getCat().getValue());
-			statement.setInt(2,obj.getSport().getValue());
-
-			statement.executeUpdate();
-			check = true;
+			 * don't need
 			 */
 		}
 		catch (Exception e){
@@ -101,28 +86,6 @@ public class UserDAO extends DAO<User>{
 		return check;
 	}
 
-	public User find(int id){
-		User user = new User();
-		try{
-			/**
-			 * TODO: ADD stored procedure
-			 */
-			/*
-			ResultSet result = this.connect.createStatement(
-					ResultSet.TYPE_FORWARD_ONLY,
-					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Accreditation WHERE id_accreditation = " + id);
-
-			while(result.next()){
-				accreditation.setId(result.getInt("id_accreditation"));
-
-			}	
-			 */
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-		return user;
-	}
 
 	public boolean find(User obj){
 		boolean check = false;
@@ -156,7 +119,10 @@ public class UserDAO extends DAO<User>{
 		return check;
 	}
 
-	public ArrayList<User> find (String mail, String passwd){
+	public ArrayList<User> find (Object obj){
+		User u = (User)obj;
+		String mail = u.getMail();
+		String passwd = u.getPassword();
 		ArrayList<User> users = new ArrayList<User>();
 		try{
 

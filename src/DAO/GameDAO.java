@@ -1,11 +1,14 @@
 package DAO;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 import Beans.*;
+import oracle.jdbc.OracleCallableStatement;
+import oracle.jdbc.OracleTypes;
 
 public class GameDAO extends DAO<Game>{
 
@@ -23,25 +26,20 @@ public class GameDAO extends DAO<Game>{
 		boolean check = false;
 
 		try{
-			
-			if(!find(obj)){
-				/**
-				 * TODO: ADD stored procedure
-				 */
-				/*PreparedStatement statement = connect.prepareStatement(
-						"INSERT INTO Accreditation (categorie,sport) VALUES(?,?)");
-				statement.setInt(1,obj.getCat().getValue());
-				statement.setInt(2,obj.getSport().getValue());
+			String sql = "{call ADDGAME(?, ?, ?, ?)}";
+			CallableStatement call = connect.prepareCall(sql);
 
-				statement.executeUpdate();
-				
-				check = true;
-				*/
-			}
-			
+			long date = obj.getDate().toEpochDay();
+			call.setLong(1, date);
+			call.setInt(2, obj.getNbrTurns());
+			call.setInt(3, obj.getResultGame());
+			call.setInt(4, obj.getUser().getId());
+
+			if(call.execute()) 
+			    check = true;
 		}
-		catch (Exception e){
-			e.printStackTrace();  
+		catch(Exception e){
+			e.printStackTrace();
 		}
 		return check;
 	}
@@ -53,16 +51,8 @@ public class GameDAO extends DAO<Game>{
 		try{
 			/**
 			 * TODO: ADD stored procedure
+			 * Don't need.
 			 */
-			/*
-			PreparedStatement statement = connect.prepareStatement(
-					"DELETE FROM Accreditation WHERE id_accreditation= ?");
-			statement.setInt(1,obj.getId());
-
-			statement.executeUpdate();
-
-			check = true;
-			*/
 		}
 		catch (Exception e){
 			e.printStackTrace();  
@@ -71,24 +61,25 @@ public class GameDAO extends DAO<Game>{
 	}
 
 	public boolean update(Game obj){
+
 		boolean check = false;
 
 		try{
-			/**
-			 * TODO: ADD stored procedure
-			 */
-			/*
-			PreparedStatement statement = connect.prepareStatement(
-					"UPDATE Accreditation set categorie =? ,sport = ? WHERE id_accreditation = " + obj.getId());
-			statement.setInt(1,obj.getCat().getValue());
-			statement.setInt(2,obj.getSport().getValue());
+			String sql = "{call UPDATEGAME(?, ?, ?, ?, ?)}";
+			CallableStatement call = connect.prepareCall(sql);
 
-			statement.executeUpdate();
-			check = true;
-			*/
+			long date = obj.getDate().toEpochDay();
+			call.setLong(1, date);
+			call.setInt(2, obj.getNbrTurns());
+			call.setInt(3, obj.getResultGame());
+			call.setInt(4, obj.getUser().getId());
+			call.setInt(5, obj.getId());
+
+			if(call.execute()) 
+			    check = true;
 		}
-		catch (Exception e){
-			e.printStackTrace();  
+		catch(Exception e){
+			e.printStackTrace();
 		}
 		return check;
 	}
@@ -96,19 +87,24 @@ public class GameDAO extends DAO<Game>{
 	public Game find(int id){
 		Game game = new Game();
 		try{
-			/**
-			 * TODO: ADD stored procedure
-			 */
-			/*
-			ResultSet result = this.connect.createStatement(
-					ResultSet.TYPE_FORWARD_ONLY,
-					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Accreditation WHERE id_accreditation = " + id);
+			String sql = "{call FINDGAME(?, ?)}";
+			CallableStatement call = connect.prepareCall(sql, 
+					ResultSet.TYPE_FORWARD_ONLY, 
+					ResultSet.CONCUR_READ_ONLY);
+
+			call.setInt(1, id);
+			call.registerOutParameter(2, OracleTypes.CURSOR); //REF CURSOR
+
+			call.execute();
+			ResultSet result = ((OracleCallableStatement)call).getCursor(2);
 			
 			while(result.next()){
-				accreditation.setId(result.getInt("id_accreditation"));
-				
+				game.setId(result.getInt("id_game"));
+				long date = result.getInt("id_game");
+				game.setDate(LocalDate.ofEpochDay(date));
+				game.setNbrTurns(result.getInt("nbr_turns"));
+				game.setResultGame(result.getInt("result_game"));				
 			}	
-			*/
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -116,28 +112,38 @@ public class GameDAO extends DAO<Game>{
 		return game;
 	}
 	
-	public boolean find(Game obj){
-		boolean check = false;
+	public ArrayList<Game> find(Object obj){
+		User u = (User)obj;
+		ArrayList<Game> games = new ArrayList<Game>();
 		try{
-			/**
-			 * TODO: ADD stored procedure
-			 */
-			/*
-			ResultSet result = this.connect.createStatement(
-					ResultSet.TYPE_FORWARD_ONLY,
-					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Accreditation WHERE categorie = " 
-					+ obj.getCat().getValue()
-					+ " and sport = " + obj.getSport().getValue());
+			String sql = "{call FINDGAMEBYUSER(?, ?)}";
+			CallableStatement call = connect.prepareCall(sql, 
+					ResultSet.TYPE_FORWARD_ONLY, 
+					ResultSet.CONCUR_READ_ONLY);
+
+			call.setInt(1, u.getId());
+			call.registerOutParameter(2, OracleTypes.CURSOR); //REF CURSOR
+
+			call.execute();
+			ResultSet result = ((OracleCallableStatement)call).getCursor(2);
 			
 			while(result.next()){
-				check = true;
+				Game game = new Game();
+				
+				game.setId(result.getInt("id_game"));
+				long date = result.getInt("date_game");
+				game.setDate(LocalDate.ofEpochDay(date));
+				game.setNbrTurns(result.getInt("nbr_turns"));
+				game.setResultGame(result.getInt("result_game"));
+				game.setUser(u);
+				
+				games.add(game);
 			}	
-			*/
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
-		return check;
+		return games;
 	}
 	
 	

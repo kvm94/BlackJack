@@ -5,6 +5,7 @@ import java.util.List;
 public class Turn {
 
 	private int id;
+	private int idGame;
 	private int win;
 	private int croupierScore;
 	private int userScore;
@@ -75,5 +76,13 @@ public class Turn {
 
 	public void setWin(int win) {
 		this.win = win;
+	}
+
+	public int getIdGame() {
+		return idGame;
+	}
+
+	public void setIdGame(int idGame) {
+		this.idGame = idGame;
 	}
 }

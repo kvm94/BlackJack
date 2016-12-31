@@ -1,6 +1,7 @@
 package DAO;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 
 public abstract class DAO<T> {
@@ -16,7 +17,7 @@ public abstract class DAO<T> {
 	
 	public abstract boolean update(T obj);
 	
-	public abstract T find(int id);
+	public abstract ArrayList<T> find(Object obj);
 	
 }
 
