@@ -34,9 +34,11 @@ public class Sell extends HttpServlet {
 		transaction.setAmount(transactionModel.sellToken(request.getParameter("sellAmount"), user.getCapital()));
 
 		if (transactionModel.getErrors().isEmpty()) {
-			user.setCapital(user.getCapital() - transaction.getAmount());
+			user.setCapital(user.getCapital() + transaction.getAmount());
 
 			session.setAttribute(ATT_SESSION_USER, user);
+			
+			// TODO : CREATE transaction + UPDATE User (capital)
 		}
 
 		request.setAttribute(ATT_MODEL, transactionModel);

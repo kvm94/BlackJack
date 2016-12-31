@@ -37,6 +37,9 @@ public class Buy extends HttpServlet {
 			user.setCapital(user.getCapital() + transaction.getAmount());
 
 			session.setAttribute(ATT_SESSION_USER, user);
+			
+			// TODO : CREATE transaction + UPDATE User (capital)
+			
 		}
 
 		request.setAttribute(ATT_MODEL, transactionModel);

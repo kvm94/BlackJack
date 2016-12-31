@@ -58,6 +58,7 @@ public class StopTurn extends HttpServlet {
 			}
 			game.getTurns().add(turn);
 			game.setNbrTurns(game.getNbrTurns() + 1);
+			
 			// TODO : CREATE Turn + CREATE (si premier Turn)/UPDATE Game
 			// (nbrTurns, resultGame) + UPDATE User (capital);
 		}

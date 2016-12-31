@@ -26,6 +26,11 @@ public class GameModel {
 	public Game init() {
 		game.setDate(LocalDate.now());
 		game.setTurns(new ArrayList<Turn>());
+		
+		
+		
 		return game;
 	}
+	
+	// TODO : fonction CREATE et UPDATE
 }
