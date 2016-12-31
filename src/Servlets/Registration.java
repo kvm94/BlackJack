@@ -41,5 +41,6 @@ public class Registration extends HttpServlet {
 			request.setAttribute(ATT_USER, user);
 			this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 		}
+	
 	}
 }

@@ -32,20 +32,23 @@ public class Connection extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		UserModel model = new UserModel();
-		User user = model.connect(request.getParameter("mail"), request.getParameter("password"));
 
-		// TODO à virer
-		user.setCapital(1000);
+			UserModel model = new UserModel();
+			User user = model.connect(request.getParameter("mail"), request.getParameter("password"));
 
-		HttpSession session = request.getSession();
-		if (model.getErrors().isEmpty()) {
-			session.setAttribute(ATT_SESSION_USER, user);
-			this.getServletContext().getRequestDispatcher(ACCES_MENU).forward(request, response);
-		} else {
-			session.setAttribute(ATT_SESSION_USER, null);
-			request.setAttribute(ATT_MODEL, model);
-			this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
-		}
+			user.setCapital(1000);
+
+			HttpSession session = request.getSession();
+			if (model.getErrors().isEmpty()) {
+				session.setAttribute(ATT_SESSION_USER, user);
+				this.getServletContext().getRequestDispatcher(ACCES_MENU).forward(request, response);
+			} else {
+				session.setAttribute(ATT_SESSION_USER, null);
+				request.setAttribute(ATT_MODEL, model);
+				this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
+			}
+	
+		
+
 	}
 }

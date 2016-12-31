@@ -23,8 +23,7 @@ public class ConnectToOracle {
         	throw new Exception("Impossible de trouver le driver pour la base de donnée!");
 
         } catch (SQLException e) {
-        	//throw new Exception("Impossible de se connecter à  la base de donnée.");
-        	System.out.println(e);
+        	throw new Exception("Impossible de se connecter à  la base de donnée.");
         }
 
         if (snglConnection == null) {
@@ -35,11 +34,11 @@ public class ConnectToOracle {
     /**
      * Déstructeur qui ferme la connexion à la base de données.
      */
-    public void finalize()
+    /*public void finalize()
     {
       disconnect();
     }
-    
+    */
     /**
      * Récupère l'instance de la classe pour le Singleton.
      * @return La connexion.
@@ -63,7 +62,7 @@ public class ConnectToOracle {
      * Se déconnecte de la base de données.
      * @return Tur si la base de données à bien été déconnecté.
      */
-    static public boolean disconnect()
+    /*static public boolean disconnect()
 
     {
       try
@@ -79,6 +78,6 @@ public class ConnectToOracle {
         e.printStackTrace();
       }
       return false;
-    }
+    }*/
 }
 
