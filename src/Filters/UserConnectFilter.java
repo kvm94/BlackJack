@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class UserFilter implements Filter {
+public class UserConnectFilter implements Filter {
 	
-	public static final String ACCES_CONNEXION = "/connection";
+	public static final String ACCES_MENU = "/menu";
 	public static final String ATT_SESSION_USER = "sessionUser";
 
 	@Override
@@ -27,17 +27,10 @@ public class UserFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 
-		String chemin = request.getRequestURI().substring(request.getContextPath().length());
-
-		if (chemin.startsWith("/registration") || chemin.startsWith("/Resources")) {
-			chain.doFilter(request, response);
-			return;
-		}
-
 		HttpSession session = request.getSession();
 
-		if (session.getAttribute(ATT_SESSION_USER) == null) {
-			request.getRequestDispatcher(ACCES_CONNEXION).forward(request, response);
+		if (session.getAttribute(ATT_SESSION_USER) != null) {
+			request.getRequestDispatcher(ACCES_MENU).forward(request, response);
 		} else {
 			chain.doFilter(request, response);
 		}

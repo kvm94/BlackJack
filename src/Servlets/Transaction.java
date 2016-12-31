@@ -6,22 +6,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-public class Deconnection extends HttpServlet {
+public class Transaction extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public static final String VIEW = "/WEB-INF/Views/connection.jsp";
+	private static final String VIEW = "/WEB-INF/Views/transaction.jsp";
 
-	public Deconnection() {
+	public Transaction() {
 		super();
 	}
 
 	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		session.invalidate();
-
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 	}
 }
