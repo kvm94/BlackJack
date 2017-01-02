@@ -65,16 +65,16 @@ public class StopTurn extends HttpServlet {
 			game.setNbrTurns(game.getNbrTurns() + 1);
 			
 			try {
-				turnModel.CreateTurn(turn);
-				if(game.getNbrTurns() > 0){
+				if(game.getNbrTurns() > 1) {
 					gameModel.UpdateGame();
 				}
 				else{
 					gameModel.CreateGame();
 				}
+				turn.setIdGame(game.getId());
+				turnModel.CreateTurn(turn);
 				userModel.updateUser(user);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			

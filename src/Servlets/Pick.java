@@ -66,9 +66,13 @@ public class Pick extends HttpServlet {
 			game.setNbrTurns(game.getNbrTurns() + 1);
 
 			try{
-				
-				
-				gameModel.CreateGame();
+				if(game.getNbrTurns() > 1) {
+					gameModel.UpdateGame();
+				}
+				else{
+					gameModel.CreateGame();
+				}
+				turn.setIdGame(game.getId());
 				turnModel.CreateTurn(turn);
 				userModel.updateUser(user);
 			}
