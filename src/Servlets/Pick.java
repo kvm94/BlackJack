@@ -11,7 +11,9 @@ import javax.servlet.http.HttpSession;
 import Beans.Game;
 import Beans.Turn;
 import Beans.User;
+import Models.GameModel;
 import Models.TurnModel;
+import Models.UserModel;
 
 public class Pick extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -43,6 +45,10 @@ public class Pick extends HttpServlet {
 		Game game = (Game) session.getAttribute(ATT_SESSION_GAME);
 
 		TurnModel turnModel = new TurnModel();
+		UserModel userModel =  new UserModel();
+		GameModel gameModel = new GameModel(user);
+		gameModel.setGame(game);
+		
 		turn = turnModel.pick(turn);
 
 		request.setAttribute(ATT_MODEL, turnModel);
@@ -58,8 +64,17 @@ public class Pick extends HttpServlet {
 			}
 			game.getTurns().add(turn);
 			game.setNbrTurns(game.getNbrTurns() + 1);
-			// TODO : CREATE Turn + CREATE/UPDATE Game (nbrTurns, resultGame) +
-			// UPDATE User (capital);
+
+			try{
+				
+				
+				gameModel.CreateGame();
+				turnModel.CreateTurn(turn);
+				userModel.updateUser(user);
+			}
+			catch(Exception ex){
+				ex.printStackTrace();
+			}
 		}
 
 		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);

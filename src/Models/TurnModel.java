@@ -8,6 +8,9 @@ import java.util.Map;
 import Beans.Card;
 import Beans.Deck;
 import Beans.Turn;
+import DAO.AbstractDAOFactory;
+import DAO.GameDAO;
+import DAO.TurnDAO;
 
 public class TurnModel {
 
@@ -15,6 +18,9 @@ public class TurnModel {
 
 	private String result;
 	private Map<String, String> errors = new HashMap<String, String>();
+	
+	private AbstractDAOFactory adf;
+	private TurnDAO turnDAO;
 
 	public int bet(String bet, double capital) {
 
@@ -215,5 +221,11 @@ public class TurnModel {
 		}
 	}
 	
-	// TODO : CREATE
+	public void CreateTurn(Turn turn) throws Exception{
+		adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		turnDAO = (TurnDAO)adf.getTurnDAO();
+		
+		turnDAO.create(turn);	
+		
+	}
 }

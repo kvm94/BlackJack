@@ -75,13 +75,17 @@ public class UserDAO extends DAO<User>{
 		boolean check = false;
 
 		try{
-			/**
-			 * TODO: ADD stored procedure
-			 * don't need
-			 */
+			String sql = "{call UPDATEUSER(?,?)}";
+			CallableStatement call = connect.prepareCall(sql);
+
+			call.setDouble(1, obj.getCapital());
+			call.setInt(2, obj.getId());
+
+			if(call.execute()) 
+			    check = true;
 		}
-		catch (Exception e){
-			e.printStackTrace();  
+		catch(Exception e){
+			e.printStackTrace();
 		}
 		return check;
 	}

@@ -186,4 +186,12 @@ public class UserModel {
 	private void setError(String field, String message) {
 		errors.put(field, message);
 	}
+	
+	public void updateUser(User user) throws Exception{
+		adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		userDAO = (UserDAO)adf.getUserDAO();
+		
+		userDAO.update(user);
+	}
+	
 }

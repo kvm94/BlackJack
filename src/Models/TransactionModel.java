@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import Beans.Transaction;
+import DAO.AbstractDAOFactory;
+import DAO.TransactionDAO;
+import DAO.UserDAO;
 
 public class TransactionModel {
 
@@ -13,6 +16,9 @@ public class TransactionModel {
 
 	private String result;
 	private Map<String, String> errors = new HashMap<String, String>();
+	
+	private AbstractDAOFactory adf;
+	private TransactionDAO transactionDAO;
 
 	public int buyToken(String amount) {
 
@@ -112,5 +118,11 @@ public class TransactionModel {
 		}
 	}
 	
-	// TODO : CREATE
+	public void createTransaction(Transaction trans) throws Exception{
+		adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		transactionDAO = (TransactionDAO)adf.getTransactionDAO();
+		
+		transactionDAO.create(trans);
+	}
+	
 }

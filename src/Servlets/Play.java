@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import Beans.Game;
+import Beans.User;
 import Models.GameModel;
 
 public class Play extends HttpServlet {
@@ -34,7 +35,8 @@ public class Play extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		if (session.getAttribute(ATT_SESSION_GAME) == null) {
-			GameModel model = new GameModel();
+			User user = (User)session.getAttribute("sessionUser");
+			GameModel model = new GameModel(user);
 			Game game = model.init();
 			session.setAttribute(ATT_SESSION_GAME, game);
 		}

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import Beans.User;
 import Models.TransactionModel;
+import Models.UserModel;
 
 public class Sell extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -29,6 +30,7 @@ public class Sell extends HttpServlet {
 		User user = (User) session.getAttribute(ATT_SESSION_USER);
 
 		TransactionModel transactionModel = new TransactionModel();
+		UserModel userModel = new UserModel();
 
 		Beans.Transaction transaction = transactionModel.init();
 		transaction.setAmount(transactionModel.sellToken(request.getParameter("sellAmount"), user.getCapital()));
@@ -39,6 +41,14 @@ public class Sell extends HttpServlet {
 			session.setAttribute(ATT_SESSION_USER, user);
 			
 			// TODO : CREATE transaction + UPDATE User (capital)
+			try {
+				transaction.setUser(user);
+				transactionModel.createTransaction(transaction);
+				userModel.updateUser(user);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		request.setAttribute(ATT_MODEL, transactionModel);

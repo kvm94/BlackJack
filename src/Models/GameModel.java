@@ -7,6 +7,9 @@ import java.util.Map;
 
 import Beans.Game;
 import Beans.Turn;
+import Beans.User;
+import DAO.AbstractDAOFactory;
+import DAO.GameDAO;
 
 public class GameModel {
 
@@ -14,6 +17,12 @@ public class GameModel {
 
 	private String result;
 	private Map<String, String> errors = new HashMap<String, String>();
+	private AbstractDAOFactory adf;
+	private GameDAO gameDAO;
+	
+	public GameModel(User u){
+		game.setUser(u);
+	}
 
 	public Map<String, String> getErrors() {
 		return errors;
@@ -32,5 +41,22 @@ public class GameModel {
 		return game;
 	}
 	
-	// TODO : fonction CREATE et UPDATE
+	public void CreateGame() throws Exception{
+		adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		gameDAO = (GameDAO)adf.getGameDAO();
+		
+		gameDAO.create(game);	
+		
+	}
+	
+	public void UpdateGame() throws Exception{
+		adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		gameDAO = (GameDAO)adf.getGameDAO();
+		
+		gameDAO.update(game);
+	}
+	
+	public void setGame(Game game){
+		this.game = game;
+	}
 }
