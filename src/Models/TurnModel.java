@@ -9,7 +9,6 @@ import Beans.Card;
 import Beans.Deck;
 import Beans.Turn;
 import DAO.AbstractDAOFactory;
-import DAO.GameDAO;
 import DAO.TurnDAO;
 
 public class TurnModel {
@@ -73,14 +72,16 @@ public class TurnModel {
 
 		// Si l'utilisateur a plus de 21 = Défaite
 		if (turn.getUserScore() > 21) {
-			turn.setWin(-1);
+			turn.setWin(0);
 		}
 		// Si l'utilisateur a 21 on le signal
 		else if (turn.getUserScore() == 21) {
+			// Si égalité
 			if (turn.getCroupierScore() == 21) {
-				turn.setWin(0);
-			} else {
 				turn.setWin(1);
+			// Si victoire
+			} else {
+				turn.setWin(2);
 			}
 		}
 
@@ -159,10 +160,12 @@ public class TurnModel {
 		turn.setCroupierScore(this.setHandValue(turn.getCroupierHand()));
 
 		if (turn.getUserScore() == 21) {
+			// Si égalité
 			if (turn.getCroupierScore() == 21) {
-				turn.setWin(0);
+				turn.setWin(1);
+			// Si BLACKJACK
 			} else {
-				turn.setWin(2);
+				turn.setWin(3);
 			}
 		}
 
@@ -181,7 +184,7 @@ public class TurnModel {
 
 		// Si le score du croupier dépasse 21 = Victoire
 		if (turn.getCroupierScore() > 21) {
-			turn.setWin(1);
+			turn.setWin(2);
 			return turn;
 			// Sinon
 		} else {
@@ -189,15 +192,15 @@ public class TurnModel {
 			turn.setUserScore(this.setHandValue(turn.getUserHand()));
 			// Si il est plus bas que celui du croupier = Défaite
 			if (turn.getCroupierScore() > turn.getUserScore()) {
-				turn.setWin(-1);
+				turn.setWin(0);
 				return turn;
 				// Si il y a égalité
 			} else if (turn.getCroupierScore() == turn.getUserScore()) {
-				turn.setWin(0);
+				turn.setWin(1);
 				return turn;
 				// Si il est meilleur que celui du croupier = Victoire
 			} else {
-				turn.setWin(1);
+				turn.setWin(2);
 				return turn;
 			}
 		}

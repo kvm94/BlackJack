@@ -55,11 +55,11 @@ public class Pick extends HttpServlet {
 		request.setAttribute(ATT_TURN, turn);
 
 		if (turn.isWin() != -2) {
-			if (turn.isWin() == 0) {
+			if (turn.isWin() == 1) {
 				user.setCapital(user.getCapital() + turn.getBet());
-			} else if (turn.isWin() == 1) {
-				user.setCapital(user.getCapital() + (2 * turn.getBet()));
 			} else if (turn.isWin() == 2) {
+				user.setCapital(user.getCapital() + (2 * turn.getBet()));
+			} else if (turn.isWin() == 3) {
 				user.setCapital(user.getCapital() + (5 / 2 * turn.getBet()));
 			}
 			game.getTurns().add(turn);
