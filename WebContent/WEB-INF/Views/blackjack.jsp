@@ -48,16 +48,16 @@
 				<p>Le croupier a ${model.setHandValue(turn.croupierHand)}</p>
 				<p>Vous avez ${model.setHandValue(turn.userHand)}</p>
 				<br/>
-				<c:if test="${turn.isWin() == 2}">
+				<c:if test="${turn.isWin() == 3}">
 					<p>Vous avez fait un BlackJack directement ! Vous gagnez ${turn.bet * (3/2)} Jetons</p>
 				</c:if>
-				<c:if test="${turn.isWin() == 1}">
+				<c:if test="${turn.isWin() == 2}">
 					<p><c:if test="${turn.getCroupierScore() > 21}">Le croupier a dépassé 21 ! </c:if>Vous avez gagné ${turn.bet} Jetons</p>
 				</c:if>
-				<c:if test="${turn.isWin() == 0}">
-					<p>Vous avez gagné ${turn.bet} Jetons</p>
+				<c:if test="${turn.isWin() == 1}">
+					<p>Vous êtes à égalité avec le croupier vous récupérez votre mise.</p>
 				</c:if>
-				<c:if test="${turn.isWin() == -1}">
+				<c:if test="${turn.isWin() == 0}">
 					<p>Vous avez perdu ${turn.bet} Jetons</p>
 				</c:if>
 			</c:if>
