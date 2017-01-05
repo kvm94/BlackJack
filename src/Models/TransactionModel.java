@@ -7,7 +7,6 @@ import java.util.Map;
 import Beans.Transaction;
 import DAO.AbstractDAOFactory;
 import DAO.TransactionDAO;
-import DAO.UserDAO;
 
 public class TransactionModel {
 

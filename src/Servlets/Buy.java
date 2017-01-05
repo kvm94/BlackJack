@@ -45,7 +45,6 @@ public class Buy extends HttpServlet {
 				transactionModel.createTransaction(transaction);
 				userModel.updateUser(user);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			

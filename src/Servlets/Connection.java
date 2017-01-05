@@ -45,8 +45,5 @@ public class Connection extends HttpServlet {
 				request.setAttribute(ATT_MODEL, model);
 				this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 			}
-	
-		
-
 	}
 }

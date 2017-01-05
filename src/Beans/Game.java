@@ -48,8 +48,8 @@ public class Game {
 		this.nbrTurns = nbrTurns;
 	}
 
-	public void setResultGame(int resultGame) {
-		this.resultGame = resultGame;
+	public void setResultGame(double resultGame) {
+		this.resultGame = (int) resultGame;
 	}
 
 	public void setTurns(List<Turn> turns) {
