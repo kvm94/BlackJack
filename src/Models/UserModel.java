@@ -30,11 +30,7 @@ public class UserModel {
 		User user = null;
 		
 		try {
-			adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
-			userDAO = (UserDAO)adf.getUserDAO();
-
 			user = new User();
-			ArrayList<User> temp = new ArrayList<User>();
 
 			try {
 				validMail(mail);
@@ -50,20 +46,15 @@ public class UserModel {
 			}
 			user.setPassword(password);
 
+			try {
+				checkMailPassword(user);
+			} catch (Exception e) {
+				setError(mail, e.getMessage());
+			}
+			user = null;
+			
 			if (errors.isEmpty()) {
-
-				//Get info from DB
-				temp = userDAO.find((Object)user);
-				if(temp.size() > 0){
-
-					user = temp.get(0);
-
-					result = "Succès de la connexion.";
-
-				}
-				else{
-					result = "Échec de la connexion.";
-				}
+				result = "Succès de la connexion.";
 			} else {
 				result = "Échec de la connexion.";
 			}
@@ -76,22 +67,11 @@ public class UserModel {
 		return user;
 	}
 
-	public Map<String, String> getErrors() {
-		return errors;
-	}
-
-	public String getResult() {
-		return result;
-	}
-
 	public User regist(String mail, String password, String confirmPassword, String name, String firstName, String birthDate) {
 		
 		User user = null;
 
 		try {
-			adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
-			userDAO = (UserDAO)adf.getUserDAO();
-
 			user = new User();
 
 			try {
@@ -123,11 +103,15 @@ public class UserModel {
 
 			}
 
+			try {
+				checkRegistration(user);
+			} catch (Exception e) {
+				setError(CHAMP_MAIL, e.getMessage());
+			}
+			
 			// Add user into DB
-			if (errors.isEmpty() && userDAO.create(user)) {
-
+			if (errors.isEmpty()) {
 				result = "Succès de l'inscription.";
-
 			} else {
 				result = "Échec de l'inscription.";
 			}
@@ -181,6 +165,36 @@ public class UserModel {
 		} else {
 			throw new Exception("Merci de saisir une date de naissance.");
 		}
+	}
+	
+	private void checkMailPassword(User user) throws Exception {
+		adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		userDAO = (UserDAO)adf.getUserDAO();
+		ArrayList<User> temp = new ArrayList<User>();
+		//Get info from DB
+		temp = userDAO.find((Object) user);
+		if(temp.size() > 0){
+			user = temp.get(0);
+		}
+		else{
+			throw new Exception("Email ou mot de passe incorrecte.");
+		}
+	}
+	
+	private void checkRegistration(User user) throws Exception {
+		adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		userDAO = (UserDAO)adf.getUserDAO();
+		if (!userDAO.create(user)) {
+			throw new Exception("Email déjà utilisé.");
+		}
+	}
+
+	public Map<String, String> getErrors() {
+		return errors;
+	}
+
+	public String getResult() {
+		return result;
 	}
 
 	private void setError(String field, String message) {
