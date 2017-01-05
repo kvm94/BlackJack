@@ -146,6 +146,33 @@ public class GameDAO extends DAO<Game>{
 		return games;
 	}
 	
+	public int getId(Game game){
+		int id= 0;
+		try{
+			String sql = "{call GETIDGAME(?,?,?,?,?)}";
+			CallableStatement call = connect.prepareCall(sql);
+
+			
+			
+			long date = game.getDate().toEpochDay();
+			call.setLong(1, date);
+			call.setInt(2, game.getNbrTurns());
+			call.setInt(3, game.getResultGame());
+			call.setInt(4, game.getUser().getId());
+			
+			call.registerOutParameter(5, java.sql.Types.INTEGER); 
+
+			call.execute();
+			
+			id = call.getInt(5); 
+			
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return id;
+	}
+	
 	
 	//[end]Methods
 	

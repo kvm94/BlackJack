@@ -71,7 +71,9 @@ public class Pick extends HttpServlet {
 				}
 				else{
 					gameModel.CreateGame();
+
 				}
+				game.setId( gameModel.GetIdGame());
 				turn.setIdGame(game.getId());
 				turnModel.CreateTurn(turn);
 				userModel.updateUser(user);

@@ -49,6 +49,13 @@ public class GameModel {
 		
 	}
 	
+	public int GetIdGame() throws Exception{
+		adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+		gameDAO = (GameDAO)adf.getGameDAO();
+		
+		return gameDAO.getId(game);
+	}
+	
 	public void UpdateGame() throws Exception{
 		adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
 		gameDAO = (GameDAO)adf.getGameDAO();
