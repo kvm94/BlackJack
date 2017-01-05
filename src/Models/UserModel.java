@@ -29,7 +29,6 @@ public class UserModel {
 		
 		User user = null;
 		
-		try {
 			user = new User();
 
 			try {
@@ -47,22 +46,16 @@ public class UserModel {
 			user.setPassword(password);
 
 			try {
-				checkMailPassword(user);
+				user = checkMailPassword(user);
 			} catch (Exception e) {
 				setError(mail, e.getMessage());
 			}
-			user = null;
 			
 			if (errors.isEmpty()) {
 				result = "Succès de la connexion.";
 			} else {
 				result = "Échec de la connexion.";
 			}
-
-		} catch (Exception e1) {
-			result = e1.getMessage();
-			setError( null, result );
-		}
 		
 		return user;
 	}
@@ -71,7 +64,6 @@ public class UserModel {
 		
 		User user = null;
 
-		try {
 			user = new User();
 
 			try {
@@ -100,7 +92,7 @@ public class UserModel {
 			try {
 				user.setBirthDate(LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 			} catch (Exception e) {
-
+				setError(CHAMP_BIRTH_DATE, e.getMessage());
 			}
 
 			try {
@@ -115,11 +107,6 @@ public class UserModel {
 			} else {
 				result = "Échec de l'inscription.";
 			}
-
-		} catch (Exception e1) {
-			result = e1.getMessage();
-			setError( null, result );
-		}
 		
 		return user;
 	}
@@ -167,25 +154,36 @@ public class UserModel {
 		}
 	}
 	
-	private void checkMailPassword(User user) throws Exception {
-		adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
-		userDAO = (UserDAO)adf.getUserDAO();
-		ArrayList<User> temp = new ArrayList<User>();
-		//Get info from DB
-		temp = userDAO.find((Object) user);
-		if(temp.size() > 0){
-			user = temp.get(0);
+	private User checkMailPassword(User user) throws Exception {
+		try {
+			adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+			userDAO = (UserDAO)adf.getUserDAO();
+			ArrayList<User> temp = new ArrayList<User>();
+			//Get info from DB
+			temp = userDAO.find((Object) user);
+			if(temp.size() > 0){
+				user = temp.get(0);
+			}
+			else{
+				throw new Exception("Email ou mot de passe incorrecte.");
+			}
+		} catch (Exception e) {
+			throw e;
 		}
-		else{
-			throw new Exception("Email ou mot de passe incorrecte.");
-		}
+		return user;
 	}
 	
 	private void checkRegistration(User user) throws Exception {
-		adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
-		userDAO = (UserDAO)adf.getUserDAO();
-		if (!userDAO.create(user)) {
-			throw new Exception("Email déjà utilisé.");
+		try {
+			adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
+			userDAO = (UserDAO)adf.getUserDAO();
+			boolean regist = false;
+			regist = userDAO.create(user);
+			if (!regist) {
+				throw new Exception("Email déjà utilisé.");
+			}
+		} catch (Exception e) {
+			throw e;
 		}
 	}
 
