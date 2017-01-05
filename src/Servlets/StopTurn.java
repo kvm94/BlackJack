@@ -53,14 +53,20 @@ public class StopTurn extends HttpServlet {
 		request.setAttribute(ATT_MODEL, turnModel);
 		request.setAttribute(ATT_TURN, turn);
 
-		if (turn.isWin() != 2) {
+		if (turn.isWin() != -2) {
 			if (turn.isWin() == 1) {
-				user.setCapital(user.getCapital() + turn.getBet());
+				game.setResultGame(game.getResultGame() + turn.getBet());
 			} else if (turn.isWin() == 2) {
 				user.setCapital(user.getCapital() + (2 * turn.getBet()));
+				game.setResultGame(game.getResultGame() + turn.getBet());
 			} else if (turn.isWin() == 3) {
 				user.setCapital(user.getCapital() + (5 / 2 * turn.getBet()));
+				game.setResultGame(game.getResultGame() + (5 / 2 * turn.getBet()));
+			} else if (turn.isWin() == 0) {
+				game.setResultGame(game.getResultGame() - turn.getBet());
 			}
+
+			session.setAttribute(ATT_SESSION_USER, user);
 			game.getTurns().add(turn);
 			game.setNbrTurns(game.getNbrTurns() + 1);
 			
@@ -70,9 +76,8 @@ public class StopTurn extends HttpServlet {
 				}
 				else{
 					gameModel.CreateGame();
-					
 				}
-				game.setId( gameModel.GetIdGame());
+				game.setId(gameModel.GetIdGame());
 				turn.setIdGame(game.getId());
 				turnModel.CreateTurn(turn);
 				userModel.updateUser(user);
