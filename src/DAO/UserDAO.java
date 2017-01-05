@@ -43,8 +43,9 @@ public class UserDAO extends DAO<User>{
 				call.setString(6,obj.getMail());
 				call.setDouble(7,  obj.getCapital());
 				
-				if(call.execute()) 
-				    check = true;
+				call.execute();
+				
+				check = true;
 			}
 
 		}
