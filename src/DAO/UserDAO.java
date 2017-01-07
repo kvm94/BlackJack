@@ -29,10 +29,10 @@ public class UserDAO extends DAO<User>{
 
 			if(!find(obj)){
 				
-				String sql = "{call ADDUSER(?,?,?,?,?,?, ?)}"; 
+				String sql = "{call AddData.addUser(?,?,?,?,?,?, ?)}"; 
 				CallableStatement call = connect.prepareCall(sql); 
 				
-				call.setString(1, "anonymous");
+				call.setString(1, obj.getMail());
 				call.setString(2,obj.getPassword());
 				call.setString(3,  obj.getName());
 				call.setString(4,  obj.getFirstName());
@@ -76,7 +76,7 @@ public class UserDAO extends DAO<User>{
 		boolean check = false;
 
 		try{
-			String sql = "{call UPDATEUSER(?,?)}";
+			String sql = "{call AddData.UpdateUser(?,?)}";
 			CallableStatement call = connect.prepareCall(sql);
 
 			call.setDouble(1, obj.getCapital());
@@ -95,7 +95,7 @@ public class UserDAO extends DAO<User>{
 	public boolean find(User obj){
 		boolean check = false;
 		try{
-			String sql = "{call FINDUSER(?,?,?)}";
+			String sql = "{call GetData.findUser(?,?,?)}";
 			CallableStatement call = connect.prepareCall(sql, 
 					ResultSet.TYPE_FORWARD_ONLY, 
 					ResultSet.CONCUR_READ_ONLY);
@@ -131,7 +131,7 @@ public class UserDAO extends DAO<User>{
 		ArrayList<User> users = new ArrayList<User>();
 		try{
 
-			String sql = "{call FINDUSER(?,?,?)}";
+			String sql = "{call GetData.findUser(?,?,?)}";
 			CallableStatement call = connect.prepareCall(sql, 
 					ResultSet.TYPE_FORWARD_ONLY, 
 					ResultSet.CONCUR_READ_ONLY);

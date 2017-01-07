@@ -9,6 +9,7 @@
 /*==============================================================*/
 create table USERS (
    ID_USER 			INTEGER 			not null,
+   LOGIN 			VARCHAR2(100),
    PASSWORD 		VARCHAR2(100) 		not null,      
    NAME 			VARCHAR2(100),
    FIRST_NAME 		VARCHAR2(100),

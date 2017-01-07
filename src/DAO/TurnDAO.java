@@ -25,7 +25,7 @@ public class TurnDAO extends DAO<Turn>{
 		boolean check = false;
 
 		try{
-			String sql = "{call ADDTURN(?, ?, ?, ?, ?)}";
+			String sql = "{call AddData.AddTurn(?, ?, ?, ?, ?)}";
 			CallableStatement call = connect.prepareCall(sql);
 
 			call.setInt(1, obj.isWin());
@@ -80,7 +80,7 @@ public class TurnDAO extends DAO<Turn>{
 		ArrayList<Turn> turns = new ArrayList<Turn>();
 		Game g = (Game)game;
 		try{
-			String sql = "{call FINDTURNBYGAME(?, ?)}";
+			String sql = "{call GetData.FindTurnByGame(?, ?)}";
 			CallableStatement call = connect.prepareCall(sql, 
 					ResultSet.TYPE_FORWARD_ONLY, 
 					ResultSet.CONCUR_READ_ONLY);

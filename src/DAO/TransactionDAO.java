@@ -26,7 +26,7 @@ public class TransactionDAO extends DAO<Transaction>{
 		boolean check = false;
 
 		try{
-			String sql = "{call ADDTRANSACTION(?, ?, ?)}";
+			String sql = "{call AddData.AddTransaction(?, ?, ?)}";
 			CallableStatement call = connect.prepareCall(sql);
 
 			long date = obj.getDate().toEpochDay();
@@ -79,7 +79,7 @@ public class TransactionDAO extends DAO<Transaction>{
 		User u = (User)user;
 		ArrayList<Transaction> transacts =  new ArrayList<Transaction>();
 		try{
-			String sql = "{call FINDTRANSACTIONBYUSER(?, ?)}";
+			String sql = "{call GetData.FindTransactionByUser(?, ?)}";
 			CallableStatement call = connect.prepareCall(sql, 
 					ResultSet.TYPE_FORWARD_ONLY, 
 					ResultSet.CONCUR_READ_ONLY);

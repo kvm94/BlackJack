@@ -26,7 +26,7 @@ public class GameDAO extends DAO<Game>{
 		boolean check = false;
 
 		try{
-			String sql = "{call ADDGAME(?, ?, ?, ?)}";
+			String sql = "{call AddData.AddGame(?, ?, ?, ?)}";
 			CallableStatement call = connect.prepareCall(sql);
 
 			long date = obj.getDate().toEpochDay();
@@ -65,7 +65,7 @@ public class GameDAO extends DAO<Game>{
 		boolean check = false;
 
 		try{
-			String sql = "{call UPDATEGAME(?, ?, ?, ?, ?)}";
+			String sql = "{call AddData.UpdateGame(?, ?, ?, ?, ?)}";
 			CallableStatement call = connect.prepareCall(sql);
 
 			long date = obj.getDate().toEpochDay();
@@ -87,7 +87,7 @@ public class GameDAO extends DAO<Game>{
 	public Game find(int id){
 		Game game = new Game();
 		try{
-			String sql = "{call FINDGAME(?, ?)}";
+			String sql = "{call GetData.FindGame(?, ?)}";
 			CallableStatement call = connect.prepareCall(sql, 
 					ResultSet.TYPE_FORWARD_ONLY, 
 					ResultSet.CONCUR_READ_ONLY);
@@ -116,7 +116,7 @@ public class GameDAO extends DAO<Game>{
 		User u = (User)obj;
 		ArrayList<Game> games = new ArrayList<Game>();
 		try{
-			String sql = "{call FINDGAMEBYUSER(?, ?)}";
+			String sql = "{call GetData.FindGameByUser(?, ?)}";
 			CallableStatement call = connect.prepareCall(sql, 
 					ResultSet.TYPE_FORWARD_ONLY, 
 					ResultSet.CONCUR_READ_ONLY);
@@ -149,7 +149,7 @@ public class GameDAO extends DAO<Game>{
 	public int getId(Game game){
 		int id= 0;
 		try{
-			String sql = "{call GETIDGAME(?,?,?,?,?)}";
+			String sql = "{call GetData.GetIdGame(?,?,?,?,?)}";
 			CallableStatement call = connect.prepareCall(sql);
 
 			
