@@ -4,6 +4,7 @@ import Beans.Card;
 
 public class CardModel {
 
+	// Fonction qui utilise les deux suivante pour définir le nom et la valeur de la carte
 	public Card define(int i, int j) {
 
 		Card card = new Card();
@@ -14,6 +15,7 @@ public class CardModel {
 		return card;
 	}
 
+	// Fonction qui défini le nom de la carte
 	private String defineName(int i, int j) {
 
 		String name = "";
@@ -77,7 +79,8 @@ public class CardModel {
 
 		return name;
 	}
-
+	
+	// Fonction qui défini la valeur de la carte
 	private int defineValue(int j) {
 		if (j <= 8)
 			return j + 1;

@@ -7,11 +7,7 @@ import Beans.Deck;
 
 public class DeckModel {
 
-	public int count(Deck deck) {
-
-		return deck.getCards().size();
-	}
-
+	// Fonction de création du deck (52 cartes)
 	public Deck init(Deck deck) {
 
 		CardModel card = new CardModel();
@@ -25,6 +21,7 @@ public class DeckModel {
 		return deck;
 	}
 
+	// Fonction de mélange du deck
 	public Deck mix(Deck deck) {
 
 		Random random = new Random();
@@ -41,7 +38,8 @@ public class DeckModel {
 
 		return deck;
 	}
-
+	
+	// Fonction de tirage d'un carte dans le deck
 	public Card pick(Deck deck) {
 
 		if (deck.getCards().size() <= 0) {
@@ -55,14 +53,9 @@ public class DeckModel {
 		return cardToPick;
 	}
 
-	public void PrintDeck(Deck deck) {
+	// Fonction qui retourn le nombre de carte restante dans le deck
+	public int count(Deck deck) {
 
-		int i = 1;
-
-		for (Card card : deck.getCards()) {
-			System.out.println("Card " + i + ": " + card.getName() + ". Value: " + card.getValue());
-			i++;
-		}
+		return deck.getCards().size();
 	}
-
 }

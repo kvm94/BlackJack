@@ -19,12 +19,28 @@ public class UserModel {
 	private static final String CHAMP_CONFIRM_PASSWORD 	= "confirmPassword";
 	private static final String CHAMP_BIRTH_DATE 		= "birthDate";
 
+	// Attributs utiles pour l'affichage JSP
 	private String 				result;
 	private Map<String, String> errors = new HashMap<String, String>();
 
+	// Getteur/setteur des erreurs
+	public Map<String, String> getErrors() {
+		return errors;
+	}
+	private void setError(String field, String message) {
+		errors.put(field, message);
+	}
+
+	// Getteur du result 
+	public String getResult() {
+		return result;
+	}
+
+	// Utile pour la DB
 	private AbstractDAOFactory adf;
 	private UserDAO userDAO;
 
+	// Fonction de connection
 	public User connect(String mail, String password){
 		
 		User user = null;
@@ -60,6 +76,7 @@ public class UserModel {
 		return user;
 	}
 
+	// Fonction d'enregistrement
 	public User regist(String mail, String password, String confirmPassword, String name, String firstName, String birthDate) {
 		
 		User user = null;
@@ -111,6 +128,7 @@ public class UserModel {
 		return user;
 	}
 
+	// Fonction qui vérifie si l'email entré en ai bien un
 	private void validMail(String mail) throws Exception {
 		if (mail != null) {
 			if (!mail.matches("([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)")) {
@@ -121,6 +139,7 @@ public class UserModel {
 		}
 	}
 
+	// Fonction qui vérifie si le mot de passe entré est valide
 	private void validPassword(String password) throws Exception {
 		if (password != null) {
 			if (password.length() < 3) {
@@ -131,6 +150,7 @@ public class UserModel {
 		}
 	}
 
+	// Fonction qui vérifie si le mot de passe de confirmation entré est valide
 	private void validPassword(String password, String confirmPassword) throws Exception {
 		if (password != null && confirmPassword != null) {
 			if (!password.equals(confirmPassword)) {
@@ -144,6 +164,7 @@ public class UserModel {
 		}
 	}
 
+	// Fonction qui vérifie si la date entrée est valide
 	private void validBirthDate(String birthDate) throws Exception {
 		if (birthDate != null) {
 			if (!birthDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
@@ -154,6 +175,7 @@ public class UserModel {
 		}
 	}
 	
+	// Fonction qui vérifie dans la db si on peut ce connecter
 	private User checkMailPassword(User user) throws Exception {
 		try {
 			adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
@@ -173,6 +195,7 @@ public class UserModel {
 		return user;
 	}
 	
+	// Fonction qui vérifie dans la db si l'utilisateur existe déjà si non il l'enregistre dans la DB
 	private void checkRegistration(User user) throws Exception {
 		try {
 			adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
@@ -187,18 +210,7 @@ public class UserModel {
 		}
 	}
 
-	public Map<String, String> getErrors() {
-		return errors;
-	}
-
-	public String getResult() {
-		return result;
-	}
-
-	private void setError(String field, String message) {
-		errors.put(field, message);
-	}
-	
+	// Update de l'utilisateur en DB (capital)
 	public void updateUser(User user) throws Exception{
 		adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
 		userDAO = (UserDAO)adf.getUserDAO();

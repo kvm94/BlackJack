@@ -15,12 +15,28 @@ public class TurnModel {
 
 	private static final String CHAMP_BET = "bet";
 
+	// Attributs utiles pour l'affichage JSP
 	private String result;
 	private Map<String, String> errors = new HashMap<String, String>();
 	
+	// Getteur/setteur des erreurs
+	public Map<String, String> getErrors() {
+		return errors;
+	}
+	private void setError(String field, String message) {
+		errors.put(field, message);
+	}
+	
+	// Getteur du result 
+	public String getResult() {
+		return result;
+	}
+	
+	// Utile pour la DB
 	private AbstractDAOFactory adf;
 	private TurnDAO turnDAO;
-
+	
+	// Fonction de mise
 	public int bet(String bet, double capital) {
 
 		int betInt = 0;
@@ -48,69 +64,28 @@ public class TurnModel {
 		}
 		return betInt;
 	}
-
-	private void distributeACard(List<Card> hand, Card card) {
-		hand.add(card);
-	}
-
-	public Map<String, String> getErrors() {
-		return errors;
-	}
-
-	public String getResult() {
-		return result;
-	}
-
-	public Turn pick(Turn turn) {
-
-		DeckModel deck = new DeckModel();
-
-		this.distributeACard(turn.getUserHand(), deck.pick(turn.getDeck()));
-
-		// On calcul le score de l'utilisateur
-		turn.setUserScore(this.setHandValue(turn.getUserHand()));
-
-		// Si l'utilisateur a plus de 21 = Défaite
-		if (turn.getUserScore() > 21) {
-			turn.setWin(0);
-		}
-		// Si l'utilisateur a 21 on le signal
-		else if (turn.getUserScore() == 21) {
-			// Si égalité
-			if (turn.getCroupierScore() == 21) {
-				turn.setWin(1);
-			// Si victoire
-			} else {
-				turn.setWin(2);
+	
+	// Fonction qui vérifie si la mise entré est valide (si c'est bien un int)
+	private void validBet(String bet) throws Exception {
+		if (bet != null) {
+			if (!bet.matches("\\d+")) {
+				throw new Exception("Merci de saisir une mise valide.");
 			}
+		} else {
+			throw new Exception("Merci de saisir une mise.");
 		}
-
-		return turn;
 	}
-
-	public String printHand(List<Card> hand) {
-		String handString = "";
-		int i = 1;
-		for (Card card : hand) {
-			handString += "Carte " + i + " : ";
-			handString += card.getName() + "</br>";
-			i++;
+	
+	// Fonction qui vérifie si la mise entré est valable
+	private void validBet(int bet, double betMax) throws Exception {
+		if (bet > betMax) {
+			throw new Exception("Vous n'avez pas assez de capital pour miser autaunt.");
+		} else if (bet <= 0) {
+			throw new Exception("Merci de saisir une mise valide.");
 		}
-		return handString;
 	}
 
-	private void setError(String field, String message) {
-		errors.put(field, message);
-	}
-
-	public int setHandValue(List<Card> hand) {
-		int value = 0;
-		for (Card card : hand) {
-			value += card.getValue();
-		}
-		return value;
-	}
-
+	// Fonction qui commence le tour après la mise
 	public Turn start(int bet) {
 
 		Turn turn = new Turn();
@@ -172,6 +147,35 @@ public class TurnModel {
 		return turn;
 	}
 
+	// Fonction de tirage de cartre durant le tour (action de continuer)
+	public Turn pick(Turn turn) {
+
+		DeckModel deck = new DeckModel();
+
+		this.distributeACard(turn.getUserHand(), deck.pick(turn.getDeck()));
+
+		// On calcul le score de l'utilisateur
+		turn.setUserScore(this.setHandValue(turn.getUserHand()));
+
+		// Si l'utilisateur a plus de 21 = Défaite
+		if (turn.getUserScore() > 21) {
+			turn.setWin(0);
+		}
+		// Si l'utilisateur a 21 on le signal
+		else if (turn.getUserScore() == 21) {
+			// Si égalité
+			if (turn.getCroupierScore() == 21) {
+				turn.setWin(1);
+			// Si victoire
+			} else {
+				turn.setWin(2);
+			}
+		}
+
+		return turn;
+	}
+
+	// Fonction qui arrête le tour (action de stop)
 	public Turn stop(Turn turn) {
 
 		DeckModel deck = new DeckModel();
@@ -206,24 +210,33 @@ public class TurnModel {
 		}
 	}
 
-	private void validBet(int bet, double betMax) throws Exception {
-		if (bet > betMax) {
-			throw new Exception("Vous n'avez pas assez de capital pour miser autaunt.");
-		} else if (bet <= 0) {
-			throw new Exception("Merci de saisir une mise valide.");
-		}
+	// Fonction utilitaire de distribution de carte
+	private void distributeACard(List<Card> hand, Card card) {
+		hand.add(card);
 	}
 
-	private void validBet(String bet) throws Exception {
-		if (bet != null) {
-			if (!bet.matches("\\d+")) {
-				throw new Exception("Merci de saisir une mise valide.");
-			}
-		} else {
-			throw new Exception("Merci de saisir une mise.");
+	// Fonction dessinant la main d'un joueur
+	public String printHand(List<Card> hand) {
+		String handString = "";
+		int i = 1;
+		for (Card card : hand) {
+			handString += "Carte " + i + " : ";
+			handString += card.getName() + "</br>";
+			i++;
 		}
+		return handString;
 	}
-	
+
+	// Fonction calculant le résultat d'un joueur
+	public int setHandValue(List<Card> hand) {
+		int value = 0;
+		for (Card card : hand) {
+			value += card.getValue();
+		}
+		return value;
+	}
+
+	// Fonction d'enregistrement en DB
 	public void CreateTurn(Turn turn) throws Exception{
 		adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
 		turnDAO = (TurnDAO)adf.getTurnDAO();

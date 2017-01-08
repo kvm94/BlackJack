@@ -13,12 +13,35 @@ public class TransactionModel {
 	private static final String CHAMP_BUY_AMOUNT = "buyAmount";
 	private static final String CHAMP_SELL_AMOUNT = "sellAmount";
 
+	// Attributs utiles pour l'affichage JSP
 	private String result;
 	private Map<String, String> errors = new HashMap<String, String>();
 	
+	// Getteur/setteur des erreurs
+	public Map<String, String> getErrors() {
+		return errors;
+	}
+	private void setError(String field, String message) {
+		errors.put(field, message);
+	}
+
+	// Getteur du result 
+	public String getResult() {
+		return result;
+	}
+
+	// Utile pour la DB
 	private AbstractDAOFactory adf;
 	private TransactionDAO transactionDAO;
 
+	// Initialisation d'une transaction
+	public Transaction init() {
+		Transaction transaction = new Transaction();
+		transaction.setDate(LocalDate.now());
+		return transaction;
+	}
+	
+	// Fonction d'achat
 	public int buyToken(String amount) {
 
 		int amountInt = 0;
@@ -47,20 +70,7 @@ public class TransactionModel {
 		return amountInt;
 	}
 
-	public Map<String, String> getErrors() {
-		return errors;
-	}
-
-	public String getResult() {
-		return result;
-	}
-
-	public Transaction init() {
-		Transaction transaction = new Transaction();
-		transaction.setDate(LocalDate.now());
-		return transaction;
-	}
-
+	// Fonction de vente
 	public int sellToken(String amount, double capital) {
 		int amountInt = 0;
 
@@ -89,24 +99,7 @@ public class TransactionModel {
 		return -amountInt;
 	}
 
-	private void setError(String field, String message) {
-		errors.put(field, message);
-	}
-
-	private void validAmount(int amount) throws Exception {
-		if (amount <= 0) {
-			throw new Exception("Merci de saisir un montant valide.");
-		}
-	}
-
-	private void validAmount(int amount, double amountMax) throws Exception {
-		if (amount > amountMax) {
-			throw new Exception("Vous n'avez pas assez de capital pour vendre autaunt de jetons.");
-		} else if (amount <= 0) {
-			throw new Exception("Merci de saisir un montant valide.");
-		}
-	}
-
+	// Fonction qui vérifie si le montant entré est valide (si c'est bien un int)
 	private void validAmount(String amount) throws Exception {
 		if (amount != null) {
 			if (!amount.matches("\\d+")) {
@@ -117,11 +110,28 @@ public class TransactionModel {
 		}
 	}
 	
+	// Fonction qui vérifie si le montant entré est valide dans le cas d'un achat (pas de limite)
+	private void validAmount(int amount) throws Exception {
+		if (amount <= 0) {
+			throw new Exception("Merci de saisir un montant valide.");
+		}
+	}
+
+	// Fonction qui vérifie si le montant entré est valide dans le cas d'une vent (limite du capital de l'utilisateur)
+	private void validAmount(int amount, double amountMax) throws Exception {
+		if (amount > amountMax) {
+			throw new Exception("Vous n'avez pas assez de capital pour vendre autaunt de jetons.");
+		} else if (amount <= 0) {
+			throw new Exception("Merci de saisir un montant valide.");
+		}
+	}
+
+	// Enregistrement d'une transaction
 	public void createTransaction(Transaction trans) throws Exception{
 		adf = AbstractDAOFactory.getFactory(AbstractDAOFactory.DAO_FACTORY);
 		transactionDAO = (TransactionDAO)adf.getTransactionDAO();
 		
 		transactionDAO.create(trans);
 	}
-	
+
 }
