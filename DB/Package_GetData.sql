@@ -1,17 +1,25 @@
-CREATE OR REPLACE PACKAGE GetData
+CREATE OR REPLACE PACKAGE GetData --Création du package
 AS
+	--Définitions des procédures
 	procedure findGame				(id number, recordset OUT SYS_REFCURSOR);
 	procedure findGameByUser		(id number, recordset OUT SYS_REFCURSOR);
 	procedure findTransactionByUser	(id number, recordset OUT SYS_REFCURSOR);
 	procedure findTurnByGame		(id number, recordset OUT SYS_REFCURSOR);
 	procedure findUser				(var_mail varchar, var_passwd varchar, recordset OUT SYS_REFCURSOR);
 	procedure getIdGame				(var_date number, var_nbrTurns number, var_resultGame number, var_idUser number, id out number);
+	
+	--Exception
+	fk_violationException EXCEPTION;
+    PRAGMA EXCEPTION_INIT(fk_violationException,-2291);
 END GetData;
 /
 
+--Corp du package et des procedures
 CREATE OR REPLACE PACKAGE BODY GetData
 IS
-
+	fk_violationException EXCEPTION;
+    PRAGMA EXCEPTION_INIT(fk_violationException,-2291);
+	
 	procedure findGame(id number, recordset OUT SYS_REFCURSOR) 
 	as
 	begin
@@ -50,8 +58,10 @@ IS
 	procedure getIdGame(var_date number, var_nbrTurns number, var_resultGame number, var_idUser number, id out number) 
 	as
 	begin
+		--On récupère uniquement la dernière game.
 		SELECT id_game into id
 		FROM (
+			--Renvois tout les id possibles (peut en avoir plusieurs et créer un erreur)
 			SELECT id_game FROM GAMES 
 			WHERE 
 			date_game = var_date and

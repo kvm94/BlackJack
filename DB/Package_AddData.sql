@@ -1,17 +1,25 @@
-CREATE OR REPLACE PACKAGE AddData
+CREATE OR REPLACE PACKAGE AddData --Crée le package
 AS
+	--Définitions des procédures
 	procedure addGame			(dateGame number, nbrTurns number, resultGame number, idUser number);
 	procedure addTransaction	(dateTransaction number,var_amount number,idUser number);
 	procedure addTurn			(var_win number,var_croupierScore number,var_useScore number,var_bet number,var_idGame number);
 	procedure addUser			(login varchar,passwd  varchar,name	varchar,first_name varchar,birth_date number,mail varchar,capital number);
 	procedure updateGame		(dateGame number,nbrTurns number,resultGame number,idUser number,idGame number);
 	procedure updateUser		(var_capital number,idUser number);
+	
+	--Exception
+	fk_violationException EXCEPTION;
+    PRAGMA EXCEPTION_INIT(fk_violationException,-2291);
 END AddData;
 /
 
+--Corp du package et des procedures
 CREATE OR REPLACE PACKAGE BODY AddData
 IS
-
+	fk_violationException EXCEPTION;
+    PRAGMA EXCEPTION_INIT(fk_violationException,-2291);
+	
 	procedure addGame(
 			dateGame number,
 			nbrTurns number,
